@@ -5,21 +5,42 @@ import sys
 
 
 class RenamerError:
+    '''
+    Represents a rename error
+
+    members:
+    msg - message
+    '''
+
     def __init__(self, msg):
+        '''
+        create new RenamerError
+
+        msg - message
+        '''
         self.msg = msg
 
     def __str__(self):
+        '''string reprensentation. returns message.'''
         return self.msg
 
 
 def Renamer(_class):
+    '''decorator for classes to be an IRenamer'''
     NmRename._renamers.append(_class)
     return _class
 
 
 class IRenamer(object):
+    '''
+    Interface for renamers
+    '''
+
+    #cmdline argument
     arg = None
+    #arguemtns after cmdline argument
     argcount = -1
+    #helptext
     helptext = None
 
     def __init__(self, args):
@@ -30,6 +51,13 @@ class IRenamer(object):
 
     @staticmethod
     def withrenamedict(old, renamedict):
+        '''
+        Rename a filename base on a renamedict.
+        The keys will in the renamedict will be replaced by their values.
+
+        old - original filename
+        renamedict - dict with keys and values as str
+        '''
         new = old
         for key in renamedict.keys():
             new = new.replace(key, renamedict[key])
@@ -37,19 +65,31 @@ class IRenamer(object):
 
 
 class NmRename(object):
+    '''
+    Main class
+    '''
+
+    #global variable that holds IRenamer-classes
     _renamers = []
 
     def __init__(self, args):
+        '''
+        Create new NmRenamer
+
+        args - sys.argv without binary
+        '''
         self._showhelp = '-h' in args or '--help' in args or len(args) == 0
         self._force = '-f' in args
         self._error = None
         self._renamedirs = '-d' in args
 
+        #don't handle flags
         if self._force:
             args.remove('-f')
         if self._renamedirs:
             args.remove('-d')
 
+        #if help flag set don't rename
         if not self._showhelp:
             try:
                 self._pathlist = self._parse_args(args)
@@ -57,38 +97,61 @@ class NmRename(object):
                 self._error = e
 
     def _parse_args(self, args):
+        '''
+        Parse all cmdline arguments and to the renaming
+        Returns a list with tuples of (original, new)
+
+        args - cmdline arguments
+        '''
         pathlist = []
         _len = len(args)
         i = 0
         while i < _len:
             arg = args[i]
 
+            #if argument is a file add it to pathlist
             if os.path.isfile(arg):
                 print 'Adding file %s' % arg
                 filetuple = (os.path.dirname(arg), os.path.basename(arg))
                 pathlist.append((filetuple, filetuple))
+            #only add dictories to pathlist if renamedirs flag is set
             elif self._renamedirs and os.path.isdir(arg):
                 print 'Adding dir %s' % arg
                 dirtuple = (os.path.dirname(arg), os.path.basename(arg))
                 pathlist.append((filetuple, dirtuple))
+            #rename pathlist
             else:
+                #find renmaer based on cmdline argument
                 renamer = self._find_renamer(arg)
                 if not renamer:
                     raise RenamerError('Argument %s is neither a file' % arg +
                                        'nor a valid renamerswitch')
                 else:
+                    #enough arguments left?
                     if _len - i - renamer.argcount < 0:
                         raise RenamerError('Not enought parameters for' +
                                            ' argument %s' % arg)
+
+                    #rename
                     renamerargs = args[i+1:i+1+renamer.argcount]
                     print self._get_renametext(renamer, renamerargs)
                     pathlist = self._rename(renamer(renamerargs), pathlist)
+
+                    #correct index
                     i += renamer.argcount
+
+            #next argument
             i += 1
         return pathlist
 
     @staticmethod
     def _get_renametext(renamer, args):
+        '''
+        Get action text for a renamer.
+
+        renamer - IRenamer object
+        args - arguments for renamer
+        '''
         text = renamer.actiontext
         for arg in args:
             num = None
@@ -105,12 +168,24 @@ class NmRename(object):
 
     @staticmethod
     def _find_renamer(arg):
+        '''
+        Get the IRenamer implementation for an argument.
+        Returns None if it does not exist.
+
+        arg - argument as str
+        '''
         for renamer in NmRename._renamers:
             if renamer.arg == arg:
                 return renamer
         return None
 
     def _rename(self, renamer, pathlist):
+        '''
+        Rename a pathlist and return the new one
+
+        renamer - IRenamer implementation
+        pathlist - pathlist containing tuples of old and new filename
+        '''
         newpathlist = []
         for old, new in pathlist:
             newfile = renamer.rename(new[1]
@@ -130,6 +205,7 @@ class NmRename(object):
 
     @staticmethod
     def _print_help():
+        '''Print the help text'''
         print 'Help for nmrename 0.1'
         print
         print 'USAGE:'
@@ -201,11 +277,28 @@ class NmRename(object):
 
 
 class Position:
+    '''
+    Reprents a position in a filename
+
+    Positive number will be counted from left.
+    Numbers with a minus in front from the right
+    '''
+
     def __init__(self, pos):
+        '''
+        Create a new position.
+
+        pos - position as string.
+        '''
         self._from_left = not pos.startswith('-')
         self._num = int(pos)
 
     def get_index(self, s):
+        '''
+        Get index for a string.
+
+        s - the string
+        '''
         index = self._num if self._from_left else len(s) - self._num
         if index > len(s):
             index = len(s)
@@ -214,9 +307,6 @@ class Position:
         return index
 
 
-'''
-RENAMERS
-'''
 @Renamer
 class RenamerUpperCase(IRenamer):
     arg = '-cu'
@@ -420,10 +510,6 @@ except:
     print 'WARNING: Cannot use audiotag-renamer. Please ' + \
           'install Mutagen (http://code.google.com/p/mutagen/).'
     print
-
-'''
-///
-'''
 
 if __name__ == '__main__':
     sys.exit(NmRename(sys.argv[1:]).run())
