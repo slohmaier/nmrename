@@ -286,7 +286,7 @@ class Position:
         pos - position as string.
         '''
         self._from_left = not pos.startswith('-')
-        self._num = int(pos)
+        self._num = int(pos) if not pos.startswith('-') else -1*int(pos)
 
     def get_index(self, s):
         '''
