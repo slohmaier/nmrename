@@ -5,45 +5,45 @@ Noneus' Mass Renaming Tool
 
 help
 ====
-Help for nmrename 0.1
-
-USAGE:
-nmrename.py: [FILES ...] [COMMAND ...] ...
-
-Positions are indexes for the filename. Start an
-index with "-", if you want to start index counting
-from the end of the filename.
-
-COMMANDS:
--h --help : Print this help output.
--d        : Rename folderstructure too. Be careful with "/"'s!
--f        : Don't ask. Just rename.
--cu       : Convert filename to upper case.
--cl       : Convert filename to lower case.
--cc       : Convert filename to camel case.
--sd #1    : Remove string #1 from all filenames.
--sr #1 #2 : Replace string #1 with string #2.
--si #1 #2 : Insert string #2 at position #1.
--fn #1    : Insert filecount line from #1.
--fi #1 #2 : Insert filecount line from #2 at position #1.
--exif #1  : Rename from EXIF-Data with a pattern. (e.g. %Y.%M.%D_%h:%m:%s_%O%e)
-            Pattern Elements:
-              %Y: year (e.g. 2012)
-              %M: month (e.g. 06)
-              %D: day (e.g. 09)
-              %h: hour (e.g. 14)
-              %m: minute (e.g. 40)
-              %s: second (e.g. 09)
-              %o: complete original filename
-              %e: extension (e.g. .jpg)
-              %O: filename without extension
--tag #1   : Rename from audio tags with a pattern. (e.g. "%a - %A - %t - %y%e")
-            Pattern Elements:
-              %a: artist
-              %A: album
-              %AA: albumartist
-              %t: title
-              %y: year
-              %tn: track-number
-              %Tn: total-tracks
-              %e: file extension
+Help&nbsp;for&nbsp;nmrename&nbsp;0.1<br />
+<br />
+USAGE:<br />
+nmrename.py:&nbsp;[FILES&nbsp;...]&nbsp;[COMMAND&nbsp;...]&nbsp;...<br />
+<br />
+Positions&nbsp;are&nbsp;indexes&nbsp;for&nbsp;the&nbsp;filename.&nbsp;Start&nbsp;an<br />
+index&nbsp;with&nbsp;"-",&nbsp;if&nbsp;you&nbsp;want&nbsp;to&nbsp;start&nbsp;index&nbsp;counting<br />
+from&nbsp;the&nbsp;end&nbsp;of&nbsp;the&nbsp;filename.<br />
+<br />
+COMMANDS:<br />
+-h&nbsp;--help&nbsp;:&nbsp;Print&nbsp;this&nbsp;help&nbsp;output.<br />
+-d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Rename&nbsp;folderstructure&nbsp;too.&nbsp;Be&nbsp;careful&nbsp;with&nbsp;"/"'s!<br />
+-f&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Don't&nbsp;ask.&nbsp;Just&nbsp;rename.<br />
+-cu&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Convert&nbsp;filename&nbsp;to&nbsp;upper&nbsp;case.<br />
+-cl&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Convert&nbsp;filename&nbsp;to&nbsp;lower&nbsp;case.<br />
+-cc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Convert&nbsp;filename&nbsp;to&nbsp;camel&nbsp;case.<br />
+-sd&nbsp;#1&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Remove&nbsp;string&nbsp;#1&nbsp;from&nbsp;all&nbsp;filenames.<br />
+-sr&nbsp;#1&nbsp;#2&nbsp;:&nbsp;Replace&nbsp;string&nbsp;#1&nbsp;with&nbsp;string&nbsp;#2.<br />
+-si&nbsp;#1&nbsp;#2&nbsp;:&nbsp;Insert&nbsp;string&nbsp;#2&nbsp;at&nbsp;position&nbsp;#1.<br />
+-fn&nbsp;#1&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;Insert&nbsp;filecount&nbsp;line&nbsp;from&nbsp;#1.<br />
+-fi&nbsp;#1&nbsp;#2&nbsp;:&nbsp;Insert&nbsp;filecount&nbsp;line&nbsp;from&nbsp;#2&nbsp;at&nbsp;position&nbsp;#1.<br />
+-exif&nbsp;#1&nbsp;&nbsp;:&nbsp;Rename&nbsp;from&nbsp;EXIF-Data&nbsp;with&nbsp;a&nbsp;pattern.&nbsp;(e.g.&nbsp;%Y.%M.%D_%h:%m:%s_%O%e)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pattern&nbsp;Elements:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%Y:&nbsp;year&nbsp;(e.g.&nbsp;2012)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%M:&nbsp;month&nbsp;(e.g.&nbsp;06)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%D:&nbsp;day&nbsp;(e.g.&nbsp;09)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%h:&nbsp;hour&nbsp;(e.g.&nbsp;14)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%m:&nbsp;minute&nbsp;(e.g.&nbsp;40)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%s:&nbsp;second&nbsp;(e.g.&nbsp;09)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%o:&nbsp;complete&nbsp;original&nbsp;filename<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%e:&nbsp;extension&nbsp;(e.g.&nbsp;.jpg)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%O:&nbsp;filename&nbsp;without&nbsp;extension<br />
+-tag&nbsp;#1&nbsp;&nbsp;&nbsp;:&nbsp;Rename&nbsp;from&nbsp;audio&nbsp;tags&nbsp;with&nbsp;a&nbsp;pattern.&nbsp;(e.g.&nbsp;"%a&nbsp;-&nbsp;%A&nbsp;-&nbsp;%t&nbsp;-&nbsp;%y%e")<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pattern&nbsp;Elements:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%a:&nbsp;artist<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%A:&nbsp;album<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%AA:&nbsp;albumartist<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%t:&nbsp;title<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%y:&nbsp;year<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%tn:&nbsp;track-number<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%Tn:&nbsp;total-tracks<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%e:&nbsp;file&nbsp;extension<br />
