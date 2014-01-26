@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -59,7 +59,7 @@ class IRenamer(object):
         renamedict - dict with keys and values as str
         '''
         new = old
-        for key in renamedict.keys():
+        for key in list(renamedict.keys()):
             new = new.replace(key, renamedict[key])
         return new
 
@@ -111,12 +111,12 @@ class NmRename(object):
 
             #if argument is a file add it to pathlist
             if os.path.isfile(arg):
-                print 'Adding file %s' % arg
+                print('Adding file %s' % arg)
                 filetuple = (os.path.dirname(arg), os.path.basename(arg))
                 pathlist.append((filetuple, filetuple))
             #only add dictories to pathlist if renamedirs flag is set
             elif self._renamedirs and os.path.isdir(arg):
-                print 'Adding dir %s' % arg
+                print('Adding dir %s' % arg)
                 dirtuple = (os.path.dirname(arg), os.path.basename(arg))
                 pathlist.append((filetuple, dirtuple))
             #rename pathlist
@@ -132,7 +132,7 @@ class NmRename(object):
 
                     #rename
                     renamerargs = args[i+1:i+1+renamer.argcount]
-                    print self._get_renametext(renamer, renamerargs)
+                    print(self._get_renametext(renamer, renamerargs))
                     pathlist = self._rename(renamer(renamerargs), pathlist)
 
                     #correct index
@@ -190,7 +190,7 @@ class NmRename(object):
                                      if not self._renamedirs else
                                      os.path.join(*new), os.path.join(*old))
             if not newfile:
-                print 'Ommitting %s. Would result in empty filename.' % new[1]
+                print('Ommitting %s. Would result in empty filename.' % new[1])
                 newfile = new[1]
             newpathlist.append((
                     old,
@@ -202,16 +202,16 @@ class NmRename(object):
     @staticmethod
     def _print_help():
         '''Print the help text'''
-        print 'Help for nmrename 0.1'
-        print
-        print 'USAGE:'
-        print '%s: [FILES ...] [COMMAND ...] ...' % sys.argv[0]
-        print
-        print 'Positions are indexes for the filename. Start an'
-        print 'index with "-", if you want to start index counting'
-        print 'from the end of the filename.'
-        print
-        print 'COMMANDS:'
+        print('Help for nmrename 0.1')
+        print()
+        print('USAGE:')
+        print('%s: [FILES ...] [COMMAND ...] ...' % sys.argv[0])
+        print()
+        print('Positions are indexes for the filename. Start an')
+        print('index with "-", if you want to start index counting')
+        print('from the end of the filename.')
+        print()
+        print('COMMANDS:')
 
         helptexts = [
             ('-h --help', 'Print this help output.'),
@@ -230,9 +230,9 @@ class NmRename(object):
                 maxlen = _len
 
         for start, text in helptexts:
-            print '%s : %s' % (
+            print('%s : %s' % (
                 start+' '*(maxlen-len(start)),
-                text.strip().replace('\n', '\n'+' '*(maxlen+3)))
+                text.strip().replace('\n', '\n'+' '*(maxlen+3))))
 
     def run(self):
         if self._showhelp:
@@ -240,27 +240,27 @@ class NmRename(object):
             return 0
 
         if self._error:
-            print 'ERROR: %s' % str(self._error)
+            print('ERROR: %s' % str(self._error))
             return 1
 
-        print
-        print '---PREVIEW---'
-        print
+        print()
+        print('---PREVIEW---')
+        print()
         pathlist = []
         for old, new in self._pathlist:
             if old[1] != new[1]:
                 pathlist.append((os.path.join(old[0], old[1]), os.path.join(new[0], new[1])))
-                print '"%s" -> "%s"' % (pathlist[-1][0], pathlist[-1][1])
+                print('"%s" -> "%s"' % (pathlist[-1][0], pathlist[-1][1]))
 
         if not pathlist:
-            print 'Nothing to rename.'
+            print('Nothing to rename.')
             return 0
 
         if not self._force:
-            if raw_input('Rename? [y/n] ') != 'y':
+            if input('Rename? [y/n] ') != 'y':
                 return 0
 
-        print 'Renaming...'
+        print('Renaming...')
         for old, new in pathlist:
             newdir = os.path.dirname(new)
             if os.path.dirname(old) == newdir:
@@ -268,7 +268,7 @@ class NmRename(object):
             else:
                 os.makedirs(os.path.dirname(new))
 
-        print 'Done. Good Bye.'
+        print('Done. Good Bye.')
 
 
 class Position:
@@ -459,7 +459,7 @@ Pattern Elements:
             info = i._getexif()
 
             if info:
-                for tag, value in info.items():
+                for tag, value in list(info.items()):
                     decoded = TAGS.get(tag, tag)
                     ret[decoded] = value
             return ret
@@ -467,7 +467,7 @@ Pattern Elements:
         def rename(self, old, realold):
             exifdata = self._get_exif(realold)
             if not exifdata or not 'DateTime' in exifdata:
-                print '  Omitting "%s", because of no EXIF data or missing datetime.' % realold
+                print('  Omitting "%s", because of no EXIF data or missing datetime.' % realold)
                 return old
             else:
                 filename = os.path.basename(realold)
@@ -485,8 +485,8 @@ Pattern Elements:
                     '''%e''': ext,
                     '''%O''': basename})
 except:
-    print 'WARNING: Cannot use EXIF-renamer. Please install PIL (http://www.pythonware.com/products/pil/).'
-    print
+    print('WARNING: Cannot use EXIF-renamer. Please install PIL (http://www.pythonware.com/products/pil/).')
+    print()
 
 try:
     import mutagen
@@ -515,8 +515,8 @@ Pattern Elements:
         def rename(self, old, realold):
             tagdata = mutagen.File(realold, easy=True)
             if not tagdata:
-                print '  Omitting "%s", because of ' % realold + \
-                      'no EXIF data or missing datetime.'
+                print('  Omitting "%s", because of ' % realold + \
+                      'no EXIF data or missing datetime.')
                 return old
             else:
                 basename, ext = os.path.splitext(realold)
@@ -538,8 +538,8 @@ Pattern Elements:
                     if 'tracktotal' in tagdata else '0',
                     '''%e''': ext})
 except:
-    print 'WARNING: Cannot use audiotag-renamer. Please install Mutagen (http://code.google.com/p/mutagen/).'
-    print
+    print('WARNING: Cannot use audiotag-renamer. Please install Mutagen (http://code.google.com/p/mutagen/).')
+    print()
 
 if __name__ == '__main__':
     sys.exit(NmRename(sys.argv[1:]).run())
