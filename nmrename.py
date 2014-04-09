@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import re
 import sys
 
 
@@ -425,6 +426,20 @@ class RenamerNameFromFileInsert(IRenamer):
         line = self.lines[self.linecount]
         self.linecount += 1
         return old[:index] + line + old[index:]
+
+@Renamer
+class RenamerPythonRegex(IRenamer):
+    arg = '-pyr'
+    argcount = 2
+    helptext = 'Replace the pattern "#1" with "#2" with python regex-interpreter.\n( https://docs.python.org/library/re.html#re.sub )'
+    actiontext = 'Replacing the pattern "#1" with "#2" with python regex-interpreter.'
+
+    def __init__(self, args):
+        self.regex = re.compile(args[0])
+        self.replacee = args[1]
+
+    def rename(self, old, realold):
+        return self.regex.sub(self.replacee, old)
 
 try:
     from PIL import Image
