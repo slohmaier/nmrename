@@ -4,7 +4,7 @@ import os
 import sys
 
 
-class RenamerError:
+class RenamerError(BaseException):
     '''
     Represents a rename error
 
@@ -118,7 +118,7 @@ class NmRename(object):
             elif self._renamedirs and os.path.isdir(arg):
                 print('Adding dir %s' % arg)
                 dirtuple = (os.path.dirname(arg), os.path.basename(arg))
-                pathlist.append((filetuple, dirtuple))
+                pathlist.append((dirtuple, dirtuple))
             #rename pathlist
             else:
                 #find renmaer based on cmdline argument
