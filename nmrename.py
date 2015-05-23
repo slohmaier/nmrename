@@ -383,10 +383,13 @@ class RenamerStringInsert(IRenamer):
 
     def __init__(self, args):
         self.pos = Position(args[0])
+        self.fromright = args[0].startswith('-')
         self.s = args[1]
 
     def rename(self, old, realold):
         index = self.pos.get_index(old)
+        if self.fromright:
+        	index += 1
         return old[:index] + self.s + old[index:]
 
 @Renamer
