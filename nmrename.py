@@ -328,7 +328,7 @@ class Field:
             temppos = endpos
             endpos = startpos
             startpos = temppos
-        
+
         return None if startpos == -1 and endpos == -1 else (startpos, endpos) 
             
          
@@ -637,7 +637,46 @@ class FieldDelete(IRenamer):
         else:
             startpos = fieldres[0]-1 #correct startpos for indexing
             endpos = fieldres[1]+1 #correct endpos for indexing
-            return old[:startpos] + old[endpos:]        
+            return old[:startpos] + old[endpos:]
+
+@Renamer
+class FieldChange(IRenamer):
+    arg = '-fieldc'
+    argcount = 3
+    helptext = 'Change field #2 with field #3 delimited by #1.'
+    actiontext = 'Changing field #2 with field #3 delimited by #1.'
+
+    def __init__(self, args):
+        self._field1 = Field(args[0], args[1])
+        self._field2 = Field(args[0], args[2])
+
+    def rename(self, old, realold):
+        fieldres1 = self._field1.get_field_coords(old)
+        fieldres2 = self._field2.get_field_coords(old)
+        if not fieldres1 or not fieldres2:
+            return old
+        else:
+            startpos1 = fieldres1[0]
+            endpos1 = fieldres1[1]
+            startpos2 = fieldres2[0]
+            endpos2 = fieldres2[1]
+
+            #do nothing if same field
+            if startpos1 == startpos2:
+                return old
+
+            #make sure that 1st field is in front of second field
+            if startpos1 > startpos2:
+                temppos = (startpos2, endpos2)
+                startpos2, endpos2 = startpos1, endpos1
+                startpos1, endpos1 = temmpos
+
+            result = old[:startpos1] #everything up to 1st field
+            result += old[startpos2:endpos2+1] #2nd field instead of 1st field
+            result += old[endpos1+1:startpos2] #everything between 1st field and 2nd field
+            result += old[startpos1:endpos1+1] #1st field instead of 2nd field
+            result += old[endpos2+1:] #everything after 2nd field
+            return result
 
 if __name__ == '__main__':
     sys.exit(NmRename(sys.argv[1:]).run())
