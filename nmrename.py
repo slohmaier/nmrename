@@ -696,5 +696,26 @@ class PositionCharacterSetter(IRenamer):
             index = self._pos.get_index(old)
             return old[:index] + self._char + old[index+1:]
 
+@Renamer
+class PositionDeleter(IRenamer):
+    arg = '-pd'
+    argcount = 2
+    helptext = 'Delete from position #1 to position #2.'
+    actiontext = 'Deleting from position ? to position ?.'
+
+    def __init__(self, args):
+        self._pos1 = Position(args[0])
+        self._pos2 = Position(args[1])
+
+    def rename(self, old, realold):
+        index1 = self._pos1.get_index(old)
+        index2 = self._pos2.get_index(old)
+
+        #index2 must be smaller or equal to index2
+        if index1 > index2:
+            index1, index2 = index2, index1
+
+        return old[:index1] + old[index2:]
+
 if __name__ == '__main__':
     sys.exit(NmRename(sys.argv[1:]).run())
