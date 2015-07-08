@@ -271,6 +271,67 @@ class NmRename(object):
 
         print('Done. Good Bye.')
 
+class Field:
+    '''
+    Splitup fields in a string by defined delimiters
+    
+    delimiters is a string with a collection of delimiter characters.
+    '''
+    
+    def __init__(self, delimiters, pos):
+        '''
+        Create a new field
+        
+        delimiters - collection of delimiter characters
+        pos - position of the field
+        '''
+        self._delimiters = delimiters
+        self._pos = pos
+        
+    def get_field_coords(self, s):
+        '''
+        Get field coordinates in the string. Returns tuple of startindex, endindex.
+        
+        s - string to get coordinates for
+        pos - position of the field
+        '''
+        direction = -1 if self._pos.strip().startswith('-') else 1 #direction for iteration
+        starti = len(s) -1 if direction == -1 else 0 #start in string
+        endi = 0 if direction == -1 else (len(s) - 1) #end in string
+        startpos = -1 #resulting start position
+        endpos = -1 #resulting end position
+        fieldpos = abs(int(self._pos)) #absolute field position
+        
+        #iterate over whole string
+        i = starti
+        currentf = 0
+        while i != endi + direction:
+            if s[i] in self._delimiters:
+                #when delimiter hit count fields
+                #on field change save startpos and endpos correctly
+                currentf += 1
+                if currentf == fieldpos:
+                    startpos = i + direction
+                elif currentf == fieldpos + 1:
+                    endpos = i - direction
+            
+            i += direction
+        
+        #correct startpos and endpos for first and last field
+        if startpos == -1 and endpos != -1:
+            startpos = starti
+        elif startpos != -1 and endpos == -1:
+            endpos = endi
+        
+        #if direction is -1 correct start and endpos to other direction
+        if startpos < endpos:
+            temppos = endpos
+            endpos = startpos
+            startpos = temppos
+        
+        return None if startpos == -1 and endpos == -1 else (startpos, endpos) 
+            
+         
 
 class Position:
     '''
@@ -558,6 +619,25 @@ Pattern Elements:
 except:
     print('WARNING: Cannot use audiotag-renamer. Please install Mutagen (http://code.google.com/p/mutagen/).')
     print()
+    
+@Renamer
+class FieldDelete(IRenamer):
+    arg = '-fieldd'
+    argcount = 2
+    helptext = 'Remove field #2 delimited by #1.'
+    actiontext = 'Removing field #2 delimited by #1.'
+
+    def __init__(self, args):
+        self._field = Field(args[0], args[1])
+
+    def rename(self, old, realold):
+        fieldres = self._field.get_field_coords(old)
+        if not fieldres:
+            return old
+        else:
+            startpos = fieldres[0]
+            endpos = fieldres[1]
+            return old[:startpos] + old[endpos:]        
 
 if __name__ == '__main__':
     sys.exit(NmRename(sys.argv[1:]).run())
