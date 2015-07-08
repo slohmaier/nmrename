@@ -678,5 +678,23 @@ class FieldChange(IRenamer):
             result += old[endpos2+1:] #everything after 2nd field
             return result
 
+@Renamer
+class PositionCharacterSetter(IRenamer):
+    arg = '-ps'
+    argcount = 2
+    helptext = 'Set character at position #1 to character #2.'
+    actiontext = 'Setting character at position ? to character ?.'
+
+    def __init__(self, args):
+        self._pos = Position(args[0])
+        self._char = None if len(args[1]) > 1 else args[1]
+
+    def rename(self, old, realold):
+        if not self._char:
+            return old
+        else:
+            index = self._pos.get_index(old)
+            return old[:index] + self._char + old[index+1:]
+
 if __name__ == '__main__':
     sys.exit(NmRename(sys.argv[1:]).run())
