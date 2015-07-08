@@ -324,7 +324,7 @@ class Field:
             endpos = endi
         
         #if direction is -1 correct start and endpos to other direction
-        if startpos < endpos:
+        if startpos > endpos:
             temppos = endpos
             endpos = startpos
             startpos = temppos
@@ -635,8 +635,8 @@ class FieldDelete(IRenamer):
         if not fieldres:
             return old
         else:
-            startpos = fieldres[0]
-            endpos = fieldres[1]
+            startpos = fieldres[0]-1 #correct startpos for indexing
+            endpos = fieldres[1]+1 #correct endpos for indexing
             return old[:startpos] + old[endpos:]        
 
 if __name__ == '__main__':
