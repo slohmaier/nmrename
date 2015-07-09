@@ -64,6 +64,9 @@ class IRenamer(object):
             new = new.replace(key, renamedict[key])
         return new
 
+def get_renamer_key(renamer):
+    return renamer.arg
+
 
 class NmRename(object):
     '''
@@ -220,7 +223,7 @@ class NmRename(object):
             ('-f', 'Don\'t ask. Just rename.')
         ]
         maxlen = len(helptexts[0][0])
-        for renamer in NmRename._renamers:
+        for renamer in sorted(NmRename._renamers, key=get_renamer_key):
             helptexts.append(('%s%s%s' % (
                 renamer.arg,
                 ' ' if renamer.argcount > 0 else '',
