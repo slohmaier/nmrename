@@ -554,7 +554,7 @@ Pattern Elements:
             else:
                 filename = os.path.basename(realold)
                 basename, ext = os.path.splitext(filename)
-                dt = exifdata['DateTime'].split(' ')
+                dt = exifdata['DateTimeOriginal'].split(' ')
                 dt = dt[0].split(':') + dt[1].split(':')
                 return self.withrenamedict(self.pattern, {
                     '''%Y''': dt[0],
