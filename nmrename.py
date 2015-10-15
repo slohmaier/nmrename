@@ -123,6 +123,20 @@ class NmRename(object):
                 print('Adding dir %s' % arg)
                 dirtuple = (os.path.dirname(arg), os.path.basename(arg))
                 pathlist.append((dirtuple, dirtuple))
+            #load rename pathlist from file if requested
+            elif arg == '-l':
+                #load pathlist
+                pathlist_file = open(args[i+1], 'r')
+                for line in pathlist_file.readlines():
+                    line = line[:-1]
+                    if not os.path.exists(line):
+                        raise RenamerError('"%s" is not a valid path.' % line)
+                    dirtuple = (os.path.dirname(line), os.path.basename(line))
+                    pathlist.append((dirtuple, dirtuple))
+                
+                #correct index
+                i+=1
+                
             #rename pathlist
             else:
                 #find renmaer based on cmdline argument
@@ -220,7 +234,8 @@ class NmRename(object):
         helptexts = [
             ('-h --help', 'Print this help output.'),
             ('-d', 'Rename folderstructure too. Be careful with "/"\'s!'),
-            ('-f', 'Don\'t ask. Just rename.')
+            ('-f', 'Don\'t ask. Just rename.'),
+            ('-l #1', 'Load rename target paths from file #1 line by line.')
         ]
         maxlen = len(helptexts[0][0])
         for renamer in sorted(NmRename._renamers, key=get_renamer_key):
@@ -453,7 +468,7 @@ class RenamerStringInsert(IRenamer):
     def rename(self, old, realold):
         index = self.pos.get_index(old)
         if self.fromright:
-        	index += 1
+            index += 1
         return old[:index] + self.s + old[index:]
 
 @Renamer
