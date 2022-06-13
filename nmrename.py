@@ -220,7 +220,7 @@ class NmRename(object):
     @staticmethod
     def _print_help():
         '''Print the help text'''
-        print('Help for nmrename 0.1')
+        print('Help for nmrename 1.0')
         print()
         print('USAGE:')
         print('%s: [FILES ...] [COMMAND ...] ...' % sys.argv[0])
